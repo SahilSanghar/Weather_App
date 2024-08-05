@@ -1,6 +1,7 @@
-import { Box, Button, Input } from '@mui/material';
+import { Box, Button, Input, Drawer, IconButton, List, ListItem, ListItemText } from '@mui/material';
 import React, { useState } from 'react';
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdMenu } from "react-icons/io";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const TopButtons = ({ setQuery }) => {
     const [cityInput, setCityInput] = useState("");
@@ -11,50 +12,72 @@ const TopButtons = ({ setQuery }) => {
         { id: 4, name: 'Paris' },
         { id: 5, name: 'Toronto' }
     ]);
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const handleAddCity = () => {
         if (cityInput.trim() !== "") {
             const newCity = { id: Date.now(), name: cityInput };
             if (cities.length === 5) {
-                // Replace the oldest city (the first one in the list)
                 const newCities = [...cities.slice(1), newCity];
                 setCities(newCities);
             } else {
-                // Less than 5 cities, just add the new city
                 setCities([...cities, newCity]);
             }
             setCityInput(""); // Clear input field after adding city
         }
     };
 
+    const toggleDrawer = (open) => () => {
+        setMenuOpen(open);
+    };
+
     return (
-        <Box sx={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center'
-        }}>
-            {cities.map((city) => (
-                <Button
-                    key={city.id}
-                    sx={{
-                        color: 'white',
-                        fontSize: '1.125rem',
-                        fontWeight: 500,
-                        paddingX: 3,
-                        paddingY: 1,
-                        textTransform: 'none',
-                        borderRadius: '0.375rem',
-                        transition: 'background-color 0.2s ease-in',
-                        '&:hover': {
-                            backgroundColor: 'rgba(55, 65, 81, 0.2)',
-                        },
-                    }}
-                    onClick={() => setQuery({ q: city.name })}
-                >
-                    {city.name}
-                </Button>
-            ))}
-            {/* Input field for adding new city */}
+        <Box
+            sx={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+            }}>
+            {isMobile ? (
+                <>
+                    <IconButton onClick={toggleDrawer(true)}>
+                        <IoMdMenu size={30} color="white" />
+                    </IconButton>
+                    <Drawer anchor='left' open={menuOpen} onClose={toggleDrawer(false)}>
+                        <List>
+                            {cities.map((city) => (
+                                <ListItem button key={city.id} onClick={() => { setQuery({ q: city.name }); setMenuOpen(false); }}>
+                                    <ListItemText primary={city.name} />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Drawer>
+                </>
+            ) : (
+                cities.map((city) => (
+                    <Button
+                        key={city.id}
+                        sx={{
+                            color: 'white',
+                            fontSize: '1.125rem',
+                            fontWeight: 500,
+                            paddingX: 3,
+                            paddingY: 1,
+                            textTransform: 'none',
+                            borderRadius: '0.375rem',
+                            transition: 'background-color 0.2s ease-in',
+                            '&:hover': {
+                                backgroundColor: 'rgba(55, 65, 81, 0.2)',
+                            },
+                        }}
+                        onClick={() => setQuery({ q: city.name })}
+                    >
+                        {city.name}
+                    </Button>
+                ))
+            )}
             <Input
                 value={cityInput}
                 onChange={(e) => setCityInput(e.target.value)}
@@ -67,18 +90,16 @@ const TopButtons = ({ setQuery }) => {
                     borderRadius: '5px',
                     fontSize: '1rem',
                     backgroundColor: 'white',
-                    color: 'grey.500', 
-                    fontWeight: 300, 
+                    color: 'grey.500',
+                    fontWeight: 300,
                     '&::placeholder': {
-                    textTransform: 'lowercase', 
-                    borderBottom: '0px !important',
+                        textTransform: 'lowercase',
                     },
                     '&:hover': {
                         boxShadow: 14,
-                        borderBottom: '0px !important'
                     },
                     '&:focus': {
-                        outline: 'none', 
+                        outline: 'none',
                     },
                 }}
             />
@@ -87,8 +108,6 @@ const TopButtons = ({ setQuery }) => {
                 size={40}
                 cursor='pointer'
             />
-                {/* Add
-            </Button> */}
         </Box>
     );
 }

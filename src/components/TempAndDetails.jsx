@@ -28,7 +28,7 @@ const TempAndDetails = ({
             id: 1,
             Icon: FaThermometerEmpty,
             title: "Real Feel",
-            value: `${feels_like.toFixed()}`,
+            value: `${feels_like.toFixed()} °`,
         },
         {
             id: 2,
@@ -61,13 +61,13 @@ const TempAndDetails = ({
             id: 3,
             Icon: MdKeyboardArrowUp,
             title: "High",
-            value: `${temp_max.toFixed()}`,
+            value: `${temp_max.toFixed()} °`,
         },,
         {
             id: 4,
             Icon: MdKeyboardArrowDown,
             title: "Low",
-            value: `${temp_min.toFixed()}`,
+            value: `${temp_min.toFixed()} °`,
         },
     ];
 
@@ -101,7 +101,7 @@ return (
             />
 
             <Typography variant='p' fontSize='20px'>
-                {`${temp.toFixed()}`} &deg;
+                {`${temp.toFixed()} °`}
             </Typography>
 
             <Box
