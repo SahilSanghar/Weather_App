@@ -7,3 +7,11 @@
     font-family: 'Poppins', sans-serif;
     color: white;
   }
+
+  .cl-component-footer {
+    display: none !important;
+  }
+
+  .cl-internal-1dauvpw, .cl-internal-1hp5nqm {
+    display: none !important;
+  }
